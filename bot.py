@@ -1,0 +1,49 @@
+# bot.py
+import os
+from dotenv import load_dotenv
+from aiogram import Bot, Dispatcher, Router
+from aiogram.types import Message
+from aiogram.filters import Command
+from aiogram import F
+from yandexgpt_marketer import YandexGPTMarketerDetailedCoT
+
+# Загружаем .env
+load_dotenv()
+
+# Получаем токены
+BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+YANDEX_API_KEY = os.getenv("YANDEX_API_KEY")
+YANDEX_FOLDER_ID = os.getenv("YANDEX_FOLDER_ID")
+
+if not all([BOT_TOKEN, YANDEX_API_KEY, YANDEX_FOLDER_ID]):
+    raise ValueError("❌ Отсутствуют переменные окружения в .env")
+
+# Инициализация
+bot = Bot(token=BOT_TOKEN)
+router = Router()
+dp = Dispatcher()
+dp.include_router(router)
+marketer = YandexGPTMarketerDetailedCoT(YANDEX_API_KEY, YANDEX_FOLDER_ID)
+
+@router.message(Command("start"))
+async def send_welcome(message: Message):
+    await message.answer("Привет! 📦 Опишите товар — и я создам карточку для маркетплейса.")
+
+@router.message(F.text)
+async def handle_message(message: Message):
+    user_text = message.text.strip()
+    if not user_text:
+        await message.answer("⚠️ Пожалуйста, опишите товар текстом.")
+        return
+
+    await message.answer("⏳ Анализирую и создаю карточку...")
+    response = marketer.create_product_card(user_text)
+    await message.answer(response)
+
+async def main():
+    print("🚀 Бот запущен!")
+    await dp.start_polling(bot)
+
+if __name__ == "__main__":
+    import asyncio
+    asyncio.run(main())
