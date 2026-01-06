@@ -32,13 +32,25 @@ async def send_welcome(message: Message):
 @router.message(F.text)
 async def handle_message(message: Message):
     user_text = message.text.strip()
+    user_id = message.from_user.id
+    username = message.from_user.username or "unknown"
+
     if not user_text:
+        print(f"📩 [{username} ({user_id})]: Пустое сообщение")
         await message.answer("⚠️ Пожалуйста, опишите товар текстом.")
         return
 
+    print(f"📩 [{username} ({user_id})]: {user_text}")
     await message.answer("⏳ Анализирую и создаю карточку...")
-    response = marketer.create_product_card(user_text)
-    await message.answer(response)
+
+    try:
+        response = marketer.create_product_card(user_text)
+        print(f"✅ Ответ для {username} ({user_id}) готов (длина: {len(response)} символов)")
+        await message.answer(response)
+    except Exception as e:
+        error_msg = f"❌ Ошибка при обработке запроса от {username} ({user_id}): {str(e)}"
+        print(error_msg)
+        await message.answer("⚠️ Произошла ошибка при генерации карточки. Попробуйте позже.")
 
 async def main():
     print("🚀 Бот запущен!")
