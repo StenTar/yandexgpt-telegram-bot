@@ -5,7 +5,7 @@ from aiogram import Bot, Dispatcher, Router
 from aiogram.types import Message
 from aiogram.filters import Command
 from aiogram import F
-from yandexgpt_marketer import YandexGPTMarketerDetailedCoT
+from src.yandexgpt_marketer import YandexGPTMarketerDetailedCoT
 
 # Загружаем .env
 load_dotenv()

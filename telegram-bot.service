@@ -1,0 +1,17 @@
+[Unit]
+Description=YandexGPT Telegram Bot
+After=network.target
+
+[Service]
+Type=simple
+User=tastemih
+WorkingDirectory=/opt/ytb
+Environment=PATH=/opt/ytb/venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+ExecStart=/opt/ytb/venv/bin/python -m src.bot
+Restart=always
+RestartSec=10
+StandardOutput=append:/opt/ytb/logs/bot.log
+StandardError=append:/opt/ytb/logs/bot.error.log
+
+[Install]
+WantedBy=multi-user.target
