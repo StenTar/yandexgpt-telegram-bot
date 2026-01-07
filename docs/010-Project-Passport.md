@@ -140,9 +140,9 @@ sudo systemctl start telegram-bot
 │   ├── init.py
 │   ├── bot.py 					# Основной файл Telegram-бота
 │   └── yandexgpt_marketer.py 	# Модуль для работы с YandexGPT API
-├── logs/ 											# Директория для логов
-│   ├── bot.log 								# Стандартный вывод (stdout)
-│   └── bot.error.log 					# Вывод ошибок (stderr)
+├── logs/ 						# Директория для логов
+│   ├── bot.log 				# Стандартный вывод (stdout)
+│   └── bot.error.log				# Вывод ошибок (stderr)
 ├── venv/ 											# Виртуальное окружение Python (исключено в .gitignore)
 ├── .env 												# Файл с секретами (исключен в .gitignore)
 ├── .env.example 								# Шаблон для настройки секретов
