@@ -23,7 +23,7 @@
 | ИИ-провайдер          | YandexGPT (yandexgpt-lite)               |
 | Система               | Ubuntu 24.04 LTS                         |
 | Управление процессами | systemd                                  |
-| Логирование           | Файл /home/tastemih/telegram-bot.log     |
+| Логирование           | Файл /telegram-bot.log     |
 | Зависимости           | requirements.txt + виртуальное окружение |
 | Безопасность          | Секреты в .env (не в Git!)               |
 
