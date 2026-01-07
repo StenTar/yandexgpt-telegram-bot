@@ -142,11 +142,11 @@ sudo systemctl start telegram-bot
 │   └── yandexgpt_marketer.py 	# Модуль для работы с YandexGPT API
 ├── logs/ 						# Директория для логов
 │   ├── bot.log 				# Стандартный вывод (stdout)
-│   └── bot.error.log				# Вывод ошибок (stderr)
-├── venv/ 											# Виртуальное окружение Python (исключено в .gitignore)
-├── .env 												# Файл с секретами (исключен в .gitignore)
-├── .env.example 								# Шаблон для настройки секретов
-├── .gitignore 									# Правила для Git
+│   └── bot.error.log			# Вывод ошибок (stderr)
+├── venv/ 						# Виртуальное окружение Python (исключено в .gitignore)
+├── .env 						# Файл с секретами (исключен в .gitignore
+├── .env.example 				# Шаблон для настройки секретов
+├── .gitignore 					# Правила для Git
 ├── requirements.txt 						# Зависимости Python
 ├── telegram-bot.service 				# Конфигурационный файл для systemd
 └── README.md 									# Документация проекта
