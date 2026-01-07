@@ -148,7 +148,7 @@ sudo systemctl start telegram-bot
 ├── .env.example 				# Шаблон для настройки секретов
 ├── .gitignore 					# Правила для Git
 ├── requirements.txt 			# Зависимости Python
-├── telegram-bot.service 	# Конфигурационный файл для systemd
+├── telegram-bot.service   	# Конфигурационный файл для systemd
 └── README.md 					# Документация проекта
 ```
 
