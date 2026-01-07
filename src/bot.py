@@ -1,11 +1,14 @@
 # bot.py
 import os
+import asyncio
 from dotenv import load_dotenv
 from aiogram import Bot, Dispatcher, Router
 from aiogram.types import Message
 from aiogram.filters import Command
 from aiogram import F
+
 from src.yandexgpt_marketer import YandexGPTMarketerDetailedCoT
+from src.postgres_logger import pg_logger  # Импортируем наш логгер
 
 # Загружаем .env
 load_dotenv()
@@ -16,6 +19,7 @@ YANDEX_API_KEY = os.getenv("YANDEX_API_KEY")
 YANDEX_FOLDER_ID = os.getenv("YANDEX_FOLDER_ID")
 
 if not all([BOT_TOKEN, YANDEX_API_KEY, YANDEX_FOLDER_ID]):
+    pg_logger.log("ERROR", "system", 0, "Отсутствуют переменные окружения в .env")
     raise ValueError("❌ Отсутствуют переменные окружения в .env")
 
 # Инициализация
@@ -28,6 +32,8 @@ marketer = YandexGPTMarketerDetailedCoT(YANDEX_API_KEY, YANDEX_FOLDER_ID)
 @router.message(Command("start"))
 async def send_welcome(message: Message):
     await message.answer("Привет! 📦 Опишите товар — и я создам карточку для маркетплейса.")
+    pg_logger.log("INFO", message.from_user.username, message.from_user.id, 
+                  "Пользователь вызвал команду /start")
 
 @router.message(F.text)
 async def handle_message(message: Message):
@@ -36,26 +42,31 @@ async def handle_message(message: Message):
     username = message.from_user.username or "unknown"
 
     if not user_text:
-        print(f"📩 [{username} ({user_id})]: Пустое сообщение")
+        pg_logger.log("WARNING", username, user_id, "Получено пустое сообщение")
         await message.answer("⚠️ Пожалуйста, опишите товар текстом.")
         return
 
-    print(f"📩 [{username} ({user_id})]: {user_text}")
+    pg_logger.log("INFO", username, user_id, f"Получено сообщение от пользователя: {user_text}")
     await message.answer("⏳ Анализирую и создаю карточку...")
 
     try:
         response = marketer.create_product_card(user_text)
-        print(f"✅ Ответ для {username} ({user_id}) готов (длина: {len(response)} символов)")
+        pg_logger.log("INFO", username, user_id, 
+                     f"Карточка товара успешно создана, длина ответа: {len(response)} символов")
         await message.answer(response)
     except Exception as e:
-        error_msg = f"❌ Ошибка при обработке запроса от {username} ({user_id}): {str(e)}"
-        print(error_msg)
+        error_msg = f"Ошибка при обработке запроса: {str(e)}"
+        pg_logger.log("ERROR", username, user_id, error_msg, error=str(e))
         await message.answer("⚠️ Произошла ошибка при генерации карточки. Попробуйте позже.")
 
 async def main():
-    print("🚀 Бот запущен!")
+    pg_logger.log("INFO", "system", 0, "🚀 Бот запущен!")
     await dp.start_polling(bot)
 
 if __name__ == "__main__":
-    import asyncio
-    asyncio.run(main())
+    try:
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        pg_logger.log("INFO", "system", 0, "Бот остановлен пользователем")
+    finally:
+        pg_logger.close()
