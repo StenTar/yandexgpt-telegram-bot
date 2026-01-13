@@ -31,9 +31,9 @@ sudo systemctl stop telegram-bot
 git pull origin master
 venv/bin/pip install -r requirements.txt
 sudo systemctl start telegram-bot
+```
 
-
-### 2. **Проверим созданные файлы**
+## 2. **Проверим созданные файлы**
 ```bash
 ls -la DEPLOY-STAGING.md .env.staging.example
 
@@ -43,5 +43,5 @@ git commit -m "Добавлена инструкция по деплою на с
 
 # Отправим в оба репозитория
 git push origin master
-
+```
 
