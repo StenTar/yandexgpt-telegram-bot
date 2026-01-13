@@ -61,3 +61,4 @@ htmlcov/
 
 # Systemd service (не должен быть в репо, но если нужен для документации, можно оставить)
 # telegram-bot.service
+.env.staging
