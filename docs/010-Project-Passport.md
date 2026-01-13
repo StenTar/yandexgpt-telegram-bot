@@ -101,7 +101,7 @@ psql -h 192.168.1.249 -U ytb_admin -d ytb -c "SELECT * FROM bot_logs ORDER BY ti
 Пример запроса к таблице логов
 
 ```sql
-<SELECT id, timestamp, level, username, message FROM bot_logs ORDER BY timestamp DESC LIMIT 5;>
+SELECT id, timestamp, level, username, message FROM bot_logs ORDER BY timestamp DESC LIMIT 5;
 ```
 
 Пример вывода:
